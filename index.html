@@ -1,0 +1,1760 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aviator Interface</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+html,body{
+  width:100%;
+  min-height:100%;
+}
+
+body{
+  background:#05080d;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  padding:10px;
+  overflow:hidden;
+}
+
+/* ================= LIVE WALLPAPER ================= */
+
+.live-bg{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  z-index:-10;
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(229,9,20,.13),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 15% 80%,
+      rgba(0,160,255,.08),
+      transparent 28%
+    ),
+    linear-gradient(
+      135deg,
+      #020407 0%,
+      #070b11 45%,
+      #030509 100%
+    );
+}
+
+.live-grid{
+  position:absolute;
+  width:180%;
+  height:180%;
+  left:-40%;
+  top:-25%;
+  opacity:.17;
+
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,.045) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.045) 1px,
+      transparent 1px
+    );
+
+  background-size:42px 42px;
+
+  transform:
+    perspective(650px)
+    rotateX(62deg);
+
+  animation:gridMove 13s linear infinite;
+}
+
+@keyframes gridMove{
+  0%{
+    transform:
+      perspective(650px)
+      rotateX(62deg)
+      translateY(0);
+  }
+
+  100%{
+    transform:
+      perspective(650px)
+      rotateX(62deg)
+      translateY(42px);
+  }
+}
+
+.glow{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(15px);
+  pointer-events:none;
+}
+
+.glow.red{
+  width:340px;
+  height:340px;
+  left:-150px;
+  top:5%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(229,9,20,.14),
+      transparent 68%
+    );
+
+  animation:redGlow 8s ease-in-out infinite alternate;
+}
+
+.glow.blue{
+  width:300px;
+  height:300px;
+  right:-130px;
+  bottom:5%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,150,255,.10),
+      transparent 68%
+    );
+
+  animation:blueGlow 10s ease-in-out infinite alternate;
+}
+
+@keyframes redGlow{
+  from{
+    transform:translate(0,0) scale(.9);
+  }
+
+  to{
+    transform:translate(70px,40px) scale(1.15);
+  }
+}
+
+@keyframes blueGlow{
+  from{
+    transform:translate(0,0) scale(1);
+  }
+
+  to{
+    transform:translate(-60px,-45px) scale(1.2);
+  }
+}
+
+/* Particles */
+
+.particles{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+}
+
+.particle{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:#fff;
+  border-radius:50%;
+  opacity:.35;
+  animation:particleMove linear infinite;
+}
+
+.p1{left:8%;animation-duration:9s;top:100%}
+.p2{left:18%;animation-duration:13s;top:100%}
+.p3{left:29%;animation-duration:11s;top:100%}
+.p4{left:43%;animation-duration:15s;top:100%}
+.p5{left:57%;animation-duration:10s;top:100%}
+.p6{left:68%;animation-duration:14s;top:100%}
+.p7{left:79%;animation-duration:12s;top:100%}
+.p8{left:91%;animation-duration:16s;top:100%}
+
+@keyframes particleMove{
+  0%{
+    transform:translateY(0);
+    opacity:0;
+  }
+
+  15%{
+    opacity:.4;
+  }
+
+  85%{
+    opacity:.4;
+  }
+
+  100%{
+    transform:translateY(-115vh);
+    opacity:0;
+  }
+}
+
+/* ================= SPLASH ================= */
+
+.splash{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      rgba(229,9,20,.18),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 50% 70%,
+      rgba(255,255,255,.025),
+      transparent 35%
+    ),
+    #020407;
+
+  transition:
+    opacity .7s ease,
+    visibility .7s ease;
+}
+
+.splash.hide{
+  opacity:0;
+  visibility:hidden;
+}
+
+.splash-content{
+  width:100%;
+  max-width:330px;
+  text-align:center;
+  padding:25px;
+
+  animation:
+    splashEnter 1s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes splashEnter{
+  from{
+    opacity:0;
+    transform:translateY(20px) scale(.92);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.splash-logo-wrap{
+  position:relative;
+  width:112px;
+  height:112px;
+  margin:0 auto;
+}
+
+.splash-logo{
+  position:absolute;
+  inset:8px;
+
+  border-radius:50%;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  font-size:43px;
+
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #2a1519,
+      #0c1017 70%
+    );
+
+  border:1px solid rgba(255,255,255,.10);
+
+  box-shadow:
+    0 0 20px rgba(229,9,20,.35),
+    0 0 60px rgba(229,9,20,.10),
+    inset 0 0 25px rgba(229,9,20,.15);
+}
+
+.splash-ring{
+  position:absolute;
+  inset:0;
+
+  border-radius:50%;
+
+  border:
+    1px solid rgba(229,9,20,.65);
+
+  border-top-color:transparent;
+  border-bottom-color:transparent;
+
+  animation:ringSpin 2.2s linear infinite;
+}
+
+@keyframes ringSpin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.splash-title{
+  margin-top:22px;
+
+  font-size:25px;
+  font-weight:900;
+
+  letter-spacing:4px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #fff,
+      #ff6b6b,
+      #fff
+    );
+
+  background-size:200% auto;
+
+  -webkit-background-clip:text;
+  background-clip:text;
+
+  color:transparent;
+
+  animation:titleShine 3s linear infinite;
+}
+
+@keyframes titleShine{
+  to{
+    background-position:200% center;
+  }
+}
+
+.splash-sub{
+  margin-top:8px;
+
+  font-size:10px;
+  letter-spacing:3px;
+
+  color:#748090;
+
+  text-transform:uppercase;
+}
+
+.splash-status{
+  margin-top:25px;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+
+  color:#aab4c0;
+
+  font-size:11px;
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+
+  background:#00ff88;
+
+  box-shadow:0 0 8px #00ff88;
+
+  animation:statusPulse 1.2s infinite;
+}
+
+@keyframes statusPulse{
+  50%{
+    opacity:.35;
+    transform:scale(.75);
+  }
+}
+
+.loader{
+  width:180px;
+  height:3px;
+
+  margin:17px auto 0;
+
+  border-radius:10px;
+
+  overflow:hidden;
+
+  background:#151b25;
+}
+
+.loader span{
+  display:block;
+
+  width:35%;
+  height:100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #e50914,
+      #ff5151,
+      transparent
+    );
+
+  box-shadow:0 0 12px #e50914;
+
+  animation:loaderMove 1.25s ease-in-out infinite;
+}
+
+@keyframes loaderMove{
+  0%{
+    transform:translateX(-130%);
+  }
+
+  100%{
+    transform:translateX(420%);
+  }
+}
+
+/* ================= APP CARD ================= */
+
+.app-card{
+  width:100%;
+  max-width:400px;
+
+  background:rgba(20,26,36,.96);
+
+  border-radius:16px;
+
+  border:1px solid #232d3f;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.8),
+    0 0 50px rgba(0,0,0,.35);
+
+  overflow:hidden;
+
+  display:flex;
+  flex-direction:column;
+
+  position:relative;
+}
+
+/* Header */
+
+.header{
+  background:
+    linear-gradient(
+      135deg,
+      #1f293d,
+      #111622
+    );
+
+  padding:14px 16px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  border-bottom:1px solid #232d3f;
+}
+
+.mod-title{
+  font-size:16px;
+  font-weight:800;
+
+  color:#e50914;
+
+  text-transform:uppercase;
+
+  letter-spacing:1px;
+
+  display:flex;
+  align-items:center;
+
+  gap:6px;
+}
+
+.badge{
+  background:#e50914;
+
+  color:#fff;
+
+  font-size:10px;
+
+  padding:2px 6px;
+
+  border-radius:4px;
+
+  font-weight:bold;
+}
+
+.server-status{
+  display:flex;
+  align-items:center;
+  gap:6px;
+
+  font-size:12px;
+
+  color:#00ff88;
+}
+
+.dot{
+  width:8px;
+  height:8px;
+
+  background:#00ff88;
+
+  border-radius:50%;
+
+  box-shadow:0 0 8px #00ff88;
+}
+
+/* ================= HISTORY — UNCHANGED ================= */
+
+.history-container{
+  background:#0e121a;
+  padding:8px 12px;
+  border-bottom:1px solid #232d3f;
+
+  display:flex;
+  align-items:center;
+
+  gap:8px;
+}
+
+.history-label{
+  font-size:10px;
+  color:#6c7a89;
+  font-weight:bold;
+  white-space:nowrap;
+}
+
+.history-bar{
+  display:flex;
+  gap:6px;
+  overflow-x:hidden;
+  width:100%;
+}
+
+.history-item{
+  padding:3px 8px;
+  border-radius:12px;
+
+  font-size:11px;
+  font-weight:800;
+
+  white-space:nowrap;
+
+  animation:fadeIn .4s ease-in-out;
+}
+
+.history-item.blue{
+  background:rgba(52,152,219,.15);
+  color:#3498db;
+  border:1px solid rgba(52,152,219,.4);
+}
+
+.history-item.purple{
+  background:rgba(155,89,182,.15);
+  color:#9b59b6;
+  border:1px solid rgba(155,89,182,.4);
+}
+
+.history-item.gold{
+  background:rgba(241,196,15,.15);
+  color:#f1c40f;
+  border:1px solid rgba(241,196,15,.4);
+}
+
+.history-item.green{
+  background:rgba(46,204,113,.15);
+  color:#2ecc71;
+  border:1px solid rgba(46,204,113,.4);
+}
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:translateY(-5px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* ================= MAIN ================= */
+
+.predictor-body{
+  padding:16px;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+
+  gap:14px;
+}
+
+.plane-circle{
+  position:relative;
+
+  width:160px;
+  height:160px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(229,9,20,.15) 0%,
+      rgba(20,26,36,1) 70%
+    );
+
+  border:2px dashed #e50914;
+
+  display:flex;
+  flex-direction:column;
+
+  justify-content:center;
+  align-items:center;
+
+  box-shadow:
+    0 0 20px rgba(229,9,20,.2);
+}
+
+.plane-icon{
+  font-size:22px;
+  margin-bottom:3px;
+
+  animation:planeFloat 2s ease-in-out infinite;
+}
+
+@keyframes planeFloat{
+  0%,100%{
+    transform:translateY(0);
+  }
+
+  50%{
+    transform:translateY(-5px);
+  }
+}
+
+.multiplier-val{
+  font-size:36px;
+  font-weight:900;
+
+  color:#fff;
+
+  text-shadow:
+    0 0 10px rgba(255,255,255,.3);
+}
+
+.prediction-label{
+  font-size:10px;
+
+  color:#8899a6;
+
+  text-transform:uppercase;
+
+  letter-spacing:1px;
+
+  margin-top:2px;
+}
+
+/* Result animation */
+
+.result-animate{
+  animation:
+    resultReveal .55s
+    cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes resultReveal{
+  0%{
+    opacity:0;
+    transform:scale(.65) translateY(8px);
+    filter:blur(5px);
+  }
+
+  60%{
+    opacity:1;
+    transform:scale(1.08) translateY(-2px);
+    filter:blur(0);
+  }
+
+  100%{
+    transform:scale(1);
+  }
+}
+
+/* ================= INFO ================= */
+
+.info-grid{
+  width:100%;
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:10px;
+}
+
+.info-box{
+  background:#1c2433;
+
+  padding:8px;
+
+  border-radius:8px;
+
+  border:1px solid #2a364d;
+
+  text-align:center;
+}
+
+.info-box span{
+  display:block;
+
+  font-size:10px;
+
+  color:#8899a6;
+
+  margin-bottom:2px;
+}
+
+.info-box strong{
+  font-size:13px;
+  color:#00e5ff;
+}
+
+/* ================= BUTTON ================= */
+
+.action-container{
+  width:100%;
+}
+
+.btn-get{
+  width:100%;
+
+  position:relative;
+
+  overflow:hidden;
+
+  background:
+    linear-gradient(
+      90deg,
+      #e50914,
+      #ff3b30
+    );
+
+  color:white;
+
+  border:none;
+
+  padding:12px;
+
+  font-size:15px;
+
+  font-weight:800;
+
+  border-radius:10px;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 4px 15px rgba(229,9,20,.4);
+
+  transition:
+    transform .15s ease,
+    opacity .2s ease,
+    box-shadow .2s ease;
+}
+
+.btn-get:active{
+  transform:scale(.97);
+}
+
+.btn-get:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.btn-get.text-pop{
+  animation:textPop .35s ease;
+}
+
+@keyframes textPop{
+  0%{
+    transform:scale(.96);
+  }
+
+  50%{
+    transform:scale(1.03);
+  }
+
+  100%{
+    transform:scale(1);
+  }
+}
+
+/* Ripple */
+
+.btn-get .ripple{
+  position:absolute;
+
+  border-radius:50%;
+
+  transform:scale(0);
+
+  animation:rippleEffect .6s linear;
+
+  background:rgba(255,255,255,.35);
+
+  pointer-events:none;
+}
+
+@keyframes rippleEffect{
+  to{
+    transform:scale(4);
+    opacity:0;
+  }
+}
+
+/* ================= SOCIAL ================= */
+
+.social-buttons{
+  width:100%;
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:8px;
+}
+
+.social-btn{
+  border:1px solid #2a364d;
+
+  background:#171f2c;
+
+  color:#fff;
+
+  padding:9px 8px;
+
+  border-radius:9px;
+
+  text-decoration:none;
+
+  text-align:center;
+
+  font-size:12px;
+
+  font-weight:800;
+
+  transition:.2s;
+}
+
+.social-btn:hover{
+  background:#202b3d;
+  transform:translateY(-1px);
+}
+
+.telegram{
+  color:#29a9ea;
+}
+
+.support{
+  color:#00ff88;
+}
+
+/* ================= BOTTOM FEED ================= */
+
+.bets-container{
+  border-top:1px solid #232d3f;
+
+  background:#0e121a;
+
+  padding:12px;
+
+  height:180px;
+
+  display:flex;
+
+  flex-direction:column;
+}
+
+.bets-header{
+  display:flex;
+
+  justify-content:space-between;
+
+  font-size:11px;
+
+  color:#6c7a89;
+
+  font-weight:bold;
+
+  padding-bottom:6px;
+
+  border-bottom:1px solid #1c2433;
+
+  margin-bottom:6px;
+}
+
+.bets-list{
+  display:flex;
+
+  flex-direction:column;
+
+  gap:4px;
+
+  overflow-y:hidden;
+}
+
+.bet-row{
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  background:#141a24;
+
+  padding:5px 8px;
+
+  border-radius:6px;
+
+  font-size:11px;
+
+  border:1px solid #1c2433;
+
+  animation:fadeIn .3s ease-in-out;
+}
+
+.user-col{
+  display:flex;
+
+  align-items:center;
+
+  gap:6px;
+
+  color:#abb8c3;
+}
+
+.avatar{
+  width:16px;
+  height:16px;
+
+  border-radius:50%;
+}
+
+.bet-val{
+  color:#fff;
+  font-weight:600;
+}
+
+.cashout-val{
+  color:#00ff88;
+  font-weight:bold;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-height:700px){
+
+  .app-card{
+    transform:scale(.92);
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= LIVE BACKGROUND ================= -->
+
+<div class="live-bg">
+
+  <div class="live-grid"></div>
+
+  <div class="glow red"></div>
+
+  <div class="glow blue"></div>
+
+  <div class="particles">
+
+    <div class="particle p1"></div>
+    <div class="particle p2"></div>
+    <div class="particle p3"></div>
+    <div class="particle p4"></div>
+    <div class="particle p5"></div>
+    <div class="particle p6"></div>
+    <div class="particle p7"></div>
+    <div class="particle p8"></div>
+
+  </div>
+
+</div>
+
+
+<!-- ================= SPLASH ================= -->
+
+<div class="splash" id="splash">
+
+  <div class="splash-content">
+
+    <div class="splash-logo-wrap">
+
+      <div class="splash-ring"></div>
+
+      <div class="splash-logo">
+        ✈
+      </div>
+
+    </div>
+
+    <div class="splash-title">
+      AVIATOR
+    </div>
+
+    <div class="splash-sub">
+      LIVE INTERFACE
+    </div>
+
+    <div class="splash-status">
+
+      <span class="status-dot"></span>
+
+      <span id="splashStatus">
+        INITIALIZING SYSTEM
+      </span>
+
+    </div>
+
+    <div class="loader">
+      <span></span>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ================= MAIN APP ================= -->
+
+<div class="app-card">
+
+  <!-- Header -->
+
+  <div class="header">
+
+    <div class="mod-title">
+
+      AVIATOR
+
+      <span class="badge">
+        PRO
+      </span>
+
+    </div>
+
+    <div class="server-status">
+
+      <div class="dot"></div>
+
+      LIVE
+
+    </div>
+
+  </div>
+
+
+  <!-- History — unchanged -->
+
+  <div class="history-container">
+
+    <div class="history-label">
+      HISTORY
+    </div>
+
+    <div
+      class="history-bar"
+      id="live-history">
+
+      <span class="history-item blue">
+        1.20x
+      </span>
+
+      <span class="history-item purple">
+        3.45x
+      </span>
+
+      <span class="history-item gold">
+        5.80x
+      </span>
+
+      <span class="history-item green">
+        9.12x
+      </span>
+
+      <span class="history-item blue">
+        1.88x
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- Main -->
+
+  <div class="predictor-body">
+
+    <div class="plane-circle">
+
+      <div class="plane-icon">
+        ✈
+      </div>
+
+      <div
+        class="multiplier-val"
+        id="pred-display">
+        WAIT
+      </div>
+
+      <div
+        class="prediction-label"
+        id="status-label">
+        NEXT SIGNAL
+      </div>
+
+    </div>
+
+
+    <div class="info-grid">
+
+      <div class="info-box">
+
+        <span>
+          ACCURACY
+        </span>
+
+        <strong>
+          98.4%
+        </strong>
+
+      </div>
+
+      <div class="info-box">
+
+        <span>
+          SERVER SPEED
+        </span>
+
+        <strong id="ping-val">
+          24 ms
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="action-container">
+
+      <button
+        class="btn-get"
+        id="btn-predict"
+        onclick="startSignal(event)">
+
+        GET SIGNAL
+
+      </button>
+
+    </div>
+
+
+    <!-- Telegram + Support -->
+
+    <div class="social-buttons">
+
+      <a
+        class="social-btn telegram"
+        href="https://t.me/YourTelegram"
+        target="_blank">
+
+        ✈ TELEGRAM
+
+      </a>
+
+      <a
+        class="social-btn support"
+        href="https://t.me/YourSupport"
+        target="_blank">
+
+        ♧ SUPPORT
+
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- Bottom Feed -->
+
+  <div class="bets-container">
+
+    <div class="bets-header">
+
+      <span>
+        USER
+      </span>
+
+      <span>
+        BET (INR)
+      </span>
+
+      <span>
+        CASH OUT
+      </span>
+
+    </div>
+
+    <div
+      class="bets-list"
+      id="all-bets-list">
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   SPLASH
+========================================================= */
+
+const splash =
+document.getElementById("splash");
+
+const splashStatus =
+document.getElementById("splashStatus");
+
+const splashMessages = [
+  "INITIALIZING SYSTEM",
+  "CONNECTING SERVER",
+  "SYNCING LIVE DATA",
+  "SYSTEM READY"
+];
+
+let splashIndex = 0;
+
+const splashInterval =
+setInterval(function(){
+
+  splashIndex++;
+
+  if(
+    splashIndex <
+    splashMessages.length
+  ){
+
+    splashStatus.innerText =
+      splashMessages[splashIndex];
+
+  }
+
+},450);
+
+window.addEventListener("load",function(){
+
+  setTimeout(function(){
+
+    clearInterval(splashInterval);
+
+    splash.classList.add("hide");
+
+  },2200);
+
+});
+
+
+/* =========================================================
+   HISTORY — UNCHANGED
+========================================================= */
+
+const historyBar =
+document.getElementById("live-history");
+
+function getColorClass(val){
+
+  const num =
+    parseFloat(val);
+
+  if(num>=8)
+    return "green";
+
+  if(num>=4)
+    return "gold";
+
+  if(num>=2)
+    return "purple";
+
+  return "blue";
+}
+
+function addNewGameHistory(){
+
+  const rand =
+    Math.random();
+
+  let val;
+
+  if(rand<.45){
+
+    val =
+      (
+        1+
+        Math.random()*.99
+      ).toFixed(2);
+
+  }
+  else if(rand<.75){
+
+    val =
+      (
+        2+
+        Math.random()*1.99
+      ).toFixed(2);
+
+  }
+  else if(rand<.90){
+
+    val =
+      (
+        4+
+        Math.random()*3.99
+      ).toFixed(2);
+
+  }
+  else{
+
+    val =
+      (
+        8+
+        Math.random()*7
+      ).toFixed(2);
+
+  }
+
+  const item =
+    document.createElement("span");
+
+  item.className =
+    "history-item "+
+    getColorClass(val);
+
+  item.innerText =
+    val+"x";
+
+  historyBar.prepend(item);
+
+  if(
+    historyBar.children.length>6
+  ){
+
+    historyBar.removeChild(
+      historyBar.lastChild
+    );
+
+  }
+}
+
+
+/* =========================================================
+   BET FEED
+========================================================= */
+
+const betsListEl =
+document.getElementById(
+  "all-bets-list"
+);
+
+const userPrefixes = [
+  "p***",
+  "f***",
+  "w***",
+  "q***",
+  "d***",
+  "c***",
+  "t***",
+  "z***",
+  "m***",
+  "a***"
+];
+
+function generateBetsList(){
+
+  betsListEl.innerHTML="";
+
+  const numRows=5;
+
+  for(
+    let i=0;
+    i<numRows;
+    i++
+  ){
+
+    const user =
+      userPrefixes[
+        Math.floor(
+          Math.random()*
+          userPrefixes.length
+        )
+      ]+
+      Math.floor(
+        Math.random()*9+1
+      );
+
+    const betVal =
+      (
+        Math.random()*2000+
+        100
+      ).toFixed(2);
+
+    const isCashed =
+      Math.random()>.3;
+
+    const mult =
+      (
+        1.1+
+        Math.random()*8
+      ).toFixed(2);
+
+    const cashOut =
+      isCashed
+      ?
+      (
+        betVal*mult
+      ).toFixed(2)+" INR"
+      :
+      "-";
+
+    const avatarBg =
+      "#"+
+      Math.floor(
+        Math.random()*
+        16777215
+      ).toString(16);
+
+    betsListEl.innerHTML += `
+
+      <div class="bet-row">
+
+        <div class="user-col">
+
+          <div
+            class="avatar"
+            style="background:${avatarBg}">
+          </div>
+
+          <span>
+            ${user}
+          </span>
+
+        </div>
+
+        <span class="bet-val">
+          ${betVal}
+        </span>
+
+        <span class="cashout-val">
+          ${cashOut}
+        </span>
+
+      </div>
+
+    `;
+  }
+}
+
+
+/* =========================================================
+   AUTO UPDATE
+========================================================= */
+
+function startAutoUpdates(){
+
+  generateBetsList();
+
+  addNewGameHistory();
+
+  const randomTime =
+    Math.floor(
+      5000+
+      Math.random()*3000
+    );
+
+  setTimeout(
+    startAutoUpdates,
+    randomTime
+  );
+}
+
+
+/* =========================================================
+   RIPPLE EFFECT
+========================================================= */
+
+function createRipple(event){
+
+  const rect =
+    btn.getBoundingClientRect();
+
+  const circle =
+    document.createElement("span");
+
+  const size =
+    Math.max(
+      rect.width,
+      rect.height
+    );
+
+  circle.className =
+    "ripple";
+
+  circle.style.width =
+    size+"px";
+
+  circle.style.height =
+    size+"px";
+
+  circle.style.left =
+    (
+      event.clientX-
+      rect.left-
+      size/2
+    )+"px";
+
+  circle.style.top =
+    (
+      event.clientY-
+      rect.top-
+      size/2
+    )+"px";
+
+  btn.appendChild(circle);
+
+  setTimeout(function(){
+
+    circle.remove();
+
+  },650);
+}
+
+
+/* =========================================================
+   BUTTON TEXT ANIMATION
+========================================================= */
+
+function animateButtonText(){
+
+  btn.classList.remove(
+    "text-pop"
+  );
+
+  void btn.offsetWidth;
+
+  btn.classList.add(
+    "text-pop"
+  );
+}
+
+
+/* =========================================================
+   SIGNAL
+========================================================= */
+
+let signalRunning=false;
+let signalTimer=null;
+
+const display =
+document.getElementById(
+  "pred-display"
+);
+
+const statusLabel =
+document.getElementById(
+  "status-label"
+);
+
+const btn =
+document.getElementById(
+  "btn-predict"
+);
+
+const ping =
+document.getElementById(
+  "ping-val"
+);
+
+
+/*
+  Click = immediate demo result.
+  Button then enters a 20-second
+  cooldown.
+*/
+
+function startSignal(event){
+
+  if(signalRunning)
+    return;
+
+  createRipple(event);
+
+  animateButtonText();
+
+  signalRunning=true;
+
+  /* Immediate demo result */
+
+  showDemoResult();
+
+
+  /* 20 SECOND COOLDOWN */
+
+  let remaining=20;
+
+  btn.disabled=true;
+
+  btn.innerText =
+    "NEXT SIGNAL • "+
+    remaining+"s";
+
+  if(signalTimer)
+    clearInterval(signalTimer);
+
+  signalTimer =
+    setInterval(function(){
+
+      remaining--;
+
+      if(remaining>0){
+
+        btn.innerText =
+          "NEXT SIGNAL • "+
+          remaining+"s";
+
+        animateButtonText();
+
+      }
+
+      if(remaining<=0){
+
+        clearInterval(
+          signalTimer
+        );
+
+        signalTimer=null;
+
+        signalRunning=false;
+
+        btn.disabled=false;
+
+        btn.innerText =
+          "GET SIGNAL";
+
+        animateButtonText();
+
+      }
+
+    },1000);
+}
+
+
+/* =========================================================
+   DEMO RESULT
+========================================================= */
+
+function showDemoResult(){
+
+  /*
+    Random demo display value.
+    It does not predict or control
+    any real game's outcome.
+  */
+
+  const result =
+    (
+      1.10+
+      Math.random()*3.90
+    ).toFixed(2);
+
+  display.classList.remove(
+    "result-animate"
+  );
+
+  void display.offsetWidth;
+
+  display.classList.add(
+    "result-animate"
+  );
+
+  display.innerText =
+    result+"x";
+
+  statusLabel.classList.remove(
+    "result-animate"
+  );
+
+  void statusLabel.offsetWidth;
+
+  statusLabel.classList.add(
+    "result-animate"
+  );
+
+  statusLabel.innerText =
+    "SIGNAL READY";
+
+  ping.innerText =
+    Math.floor(
+      18+
+      Math.random()*15
+    )+" ms";
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+startAutoUpdates();
+
+</script>
+
+</body>
+</html>
